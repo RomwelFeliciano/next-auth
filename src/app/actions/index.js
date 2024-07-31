@@ -10,3 +10,17 @@ export async function handleSocialLogin(formData) {
 export async function handleLogout() {
   await signOut({ redirectTo: '/' });
 }
+
+export async function handleCredentialLogin(formData) {
+  try {
+    const response = await signIn('credentials', {
+      email: formData.get('email'),
+      password: formData.get('password'),
+      redirect: false,
+    });
+
+    return response;
+  } catch (error) {
+    throw new Error(error.message || 'Authentication failed!');
+  }
+}

@@ -20,11 +20,23 @@ export const {
         if (credentials === null) return null;
         try {
           const user = getUserByEmail(credentials?.email);
+
+          if (user) {
+            const isMatch = user?.password === credentials?.password;
+            if (isMatch) {
+              return user;
+            } else {
+              throw new Error('Wrong password!');
+            }
+          } else {
+            throw new Error('Wrong username!');
+          }
         } catch (error) {
-          throw new Error(error);
+          throw new Error(error.message || 'Authentication failed!');
         }
       },
     }),
+
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,

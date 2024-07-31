@@ -10,14 +10,22 @@ const HomePage = async () => {
 
   return (
     <div className='flex flex-col items-center m-4'>
-      <h1 className='text-3xl my-2'>{session?.user?.name}</h1>
-      <Image
-        src={session?.user.image}
-        alt={session?.user.name}
-        width={72}
-        height={72}
-        className='rounded-full'
-      />
+      {session?.user?.image && session?.user?.name ? (
+        <>
+          {' '}
+          <h1 className='text-3xl my-2'>{session?.user?.name}</h1>
+          <Image
+            src={session?.user.image}
+            alt={session?.user.name}
+            width={72}
+            height={72}
+            className='rounded-full'
+          />
+        </>
+      ) : (
+        <h1 className='text-3xl my-2'>{session?.user?.email}</h1>
+      )}
+
       <Logout />
     </div>
   );
