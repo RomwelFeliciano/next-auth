@@ -7,26 +7,25 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 const LoginForm = () => {
+  const router = useRouter();
   const [error, setError] = useState('');
 
-  const router = useRouter();
-
-  async function handleFormSubmit(e) {
-    e.preventDefault();
+  async function onSubmit(event) {
+    event.preventDefault();
     try {
-      const formData = new FormData(e.currentTarget);
+      const formData = new FormData(event.currentTarget);
 
       const response = await handleCredentialLogin(formData);
 
-      if (response?.error) {
-        setError(response.error);
+      if (!!response.error) {
+        console.error(response.error);
+        setError(response.error.message);
       } else {
-        // redirect to dashboard
-        router.push('/home');
+        router.push('/products');
       }
-    } catch (error) {
-      console.error(error);
-      setError('Wrong Credentials!');
+    } catch (e) {
+      console.error(e);
+      setError('Check your Credentials');
     }
   }
 
@@ -34,9 +33,8 @@ const LoginForm = () => {
     <>
       <div className='text-xl text-red-500'>{error}</div>
       <form
-        action=''
-        className='my-5 flex flex-col items-center border p-3 border-e-gray-200 rounded-md'
-        onSubmit={handleFormSubmit}>
+        className='my-5 flex flex-col items-center border p-3 border-gray-200 rounded-md'
+        onSubmit={onSubmit}>
         <div className='my-2'>
           <label htmlFor='email'>Email Address</label>
           <input
@@ -46,6 +44,7 @@ const LoginForm = () => {
             id='email'
           />
         </div>
+
         <div className='my-2'>
           <label htmlFor='password'>Password</label>
           <input
@@ -55,10 +54,11 @@ const LoginForm = () => {
             id='password'
           />
         </div>
+
         <button
           type='submit'
           className='bg-orange-300 mt-4 rounded flex justify-center items-center w-36'>
-          Credential Login
+          Ceredential Login
         </button>
       </form>
       <SocialLogin />
